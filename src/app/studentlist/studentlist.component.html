@@ -1,0 +1,156 @@
+<div class="col-lg-12 grid-margin stretch-card">
+  <div class="card">
+    <div class="card-body">
+      <h2 style="font-size: 16px; font-weight: 500;" class="card-title"> Student &nbsp; List </h2>
+      <div class="d-flex flex-row-reverse bd-highlight mb-2">
+        <div class="p-2 bd-highlight">
+          <select (change)="onTableSizeChange($event)" class="custom-select">
+            <option *ngFor="let size of tableSizes" [ngValue]="size">
+              {{ size }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="srch_bar">
+        <div class="stylish-input-group">
+          <input type="text" class="search-bar" [(ngModel)]="searchTerm" (keyup)="filterStudentList($event)"
+          (input)="filterStudentList($event)" placeholder="Search" id="query">
+          <span class="input-group-addon">
+          <button type="button"> <i class="fa fa-search" aria-hidden="true"></i> </button>
+          </span> </div>
+      </div>
+
+      <div class="table-responsive">
+        <table id="dtBasicExample" class="table table-striped table-bordered table-md" cellspacing="2" width="100%">
+          <thead>
+            <tr>
+              <th >
+                SNO.
+              </th>
+              <th>
+                Name of student
+              </th>
+              <th>
+                Mobile Number
+              </th>
+              <th>
+                Edit
+              </th>
+              <!-- <th>
+                Deadline
+              </th> -->
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let student of this.studentList| paginate : {
+              itemsPerPage: tableSize,
+              currentPage: page,
+              totalItems: count
+            }; let i = index" >
+            <tr>
+              <td>
+                {{ i + 1 }}
+              </td>
+              <td>
+                 {{ student.name|titlecase }}
+               </td>
+               <td>
+                 <!-- <div class="progress">
+                   <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                 </div> -->
+                 {{ student.mobileNo }}
+               </td>
+               <td>
+                <button style="font-size: 12px;"
+                class="btn btn-xs btn-inverse-success btn-rounded btn-fw"
+                  (click)="open(mymodal, student)">
+                  <span style="font-size: 12px;"> Edit Student</span>
+                </button>
+                <!-- Dialog Content -->
+                <ng-template #mymodal let-modal>
+                  <div *ngIf="this.student" style="width: 330px; height: 300px; text-align: center; margin-left: 100px;">
+                    <h3> Edit Student  </h3>
+                        <form class="forms-sample" noValidate [formGroup]="addStudentControl"
+                          (ngSubmit)="editStudent(this.student.mobileNo, this.student.name, this.student.courseName, this.student.courseCode, this.student.courseId)">
+
+                          <div class="form-group row" style="margin-top: 40px;">
+                          <label for="exampleInputEmail2" class="col-sm-3 col-form-label"> Name </label>
+                          <div class="col-sm-9">
+                            <input type="text" class="form-control" id="exampleInputEmail2" placeholder="Enter name"
+                            [value]="this.student.name" name="name" formControlName="name" required>
+                          </div>
+                        </div>
+
+                        <div class="form-group row">
+                          <label for="exampleInputEmail2" class="col-sm-3 col-form-label"> Course </label>
+                          <div class="col-sm-9">
+
+                            <div class="template-demo" >
+                              <div ngbDropdown class="d-inline-block">
+                                <div>
+                                  <button
+                                    style="width: 250px; "
+                                    class="btn btn-outline-primary"
+                                    type="button"
+                                    id="dropdownMenuOutlineButton1"
+                                    ngbDropdownToggle>
+                                    <span style="font-size: 14px;" *ngIf="!this.showCourseName && !student.courseId"> Select Course </span>
+                                    <span style="font-size: 14px; " *ngIf="!this.showCourseName && student.courseId">
+                                      {{ student.courseCode }} - {{ student.courseName }}
+                                    </span>
+                                    <span style="font-size: 14px;" *ngIf="this.showCourseName"> Course selected </span>
+                                  </button>
+                                </div>
+                                <div ngbDropdownMenu aria-labelledby="dropdownMenuOutlineButton1">
+                                  <h6 class="dropdown-header">-Courses-</h6>
+                                  <br />
+                                  <ng-container *ngFor="let course of this.courseList; let i = index">
+                                    <a style="
+                                        width: 41em;
+                                        font-size: 14px;
+                                        word-spacing: 3px;
+                                        letter-spacing: 1px;"
+                                      class="dropdown-item"
+                                      (click)="getCourseId(course.courseName, course.courseCode, course.courseId, course.subject)" >
+                                      {{ course.courseCode }} - {{ course.courseName }}
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                  </ng-container>
+                                </div>
+                                <div *ngIf="this.courseCode" style="margin-top: 20px; color: blue; font-size: 14px;">
+                                  <label> Course Selected :
+                                  {{ this.courseCode }}  - {{ this.courseName }}
+                                </label>
+                                </div>
+                                <!-- <div *ngIf="this.selectedCourse">
+                                  Selected Course {{ course.code }} - {{ course.name }}
+                                </div> -->
+                              </div>
+                            </div>
+                          </div>
+
+
+                          </div>
+
+                        <button type="submit" class="btn btn-success mr-4"> Edit Student </button>
+                    </form>
+                  </div>
+                </ng-template>
+              </td>
+               <!-- <td>
+                 May 15, 2015
+               </td> -->
+              </tr>
+              </ng-container>
+          </tbody>
+        </table>
+        <pagination-controls
+        responsive="true"
+        previousLabel="Prev"
+        nextLabel="Next"
+        (pageChange)="onTableDataChange($event)">
+      </pagination-controls>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,98 @@
+<div class="col">
+  <form class="forms-sample" noValidate [formGroup]="addNotificationControl"
+    (ngSubmit)="sendNotification(this.student)">
+    <div class="row-md-6 grid-margin card">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title" style="font-size: 16px;"> Send Notification
+            <button style=" margin-left: 550px;" type="button" class="btn btn-danger" (click)="deleteNotification()">
+              <i class="mdi mdi-delete"></i>
+              Delete Notification
+            </button>
+            <p *ngIf="!this.deleteLabel" style="font-size: 13px; color: red; margin-left: 690px; margin-top: 12px;">
+              Note: This will delete notification older than 7 days.
+            </p>
+            <div *ngIf="this.deleteLabel" style="width: 300px; margin-top: 15px; margin-left: 690px; margin-top: 12px;"
+              class="alert alert-fill-danger" role="alert">
+              <i class="mdi mdi-alert-circle"></i>
+              Deleted Successfully.
+            </div>
+          </h4>
+          <p class="card-description">
+            Please select the option to whom you want to send notification
+          </p>
+
+          <div class="row">
+            <div class="col-md-10">
+              <div class="form-group row" style="margin-top: 10px;">
+                <!-- <label class="col-sm-5 col-form-label"> Select to whom you want to send : </label> -->
+                <div class="col-sm-12">
+                  <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group" name="topic"
+                    formControlName="topic" [(ngModel)]="this.correctOption">
+                    <mat-radio-button class="example-radio-button" color="primary" *ngFor="let option of options"
+                      [value]="option" required (click)="hideLabel()">
+                      {{ option }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                      &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="this.addNotificationControl.value.topic == 'Send to the students of a particular course'">
+            <span style="color: red; font-size: 13px; margin: 10px;"> Note: Please select the course. </span>
+            <div class="col-sm-6">
+              <ng-select style="font-size: 15px;" [(ngModel)]="this.selectedCourse" name="course">
+                <ng-option *ngFor="let course of this.courseList" [value]="course.courseId">{{course.courseCode}} -
+                  {{course.courseName}}</ng-option>
+              </ng-select>
+            </div>
+          </div>
+
+          <div *ngIf="this.addNotificationControl.value.topic == 'Send to only one student'">
+            <span style="color: red; font-size: 13px;  margin: 10px;"> Note: Please select the student. </span>
+            <div class="col-sm-6">
+              <ng-select style="font-size: 15px;" [(ngModel)]="this.selectedStudent" name="student">
+                <ng-option *ngFor="let student of this.studentList" [value]="this.student">{{student.name | titlecase}}
+                </ng-option>
+              </ng-select>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="row-md-6 grid-margin card">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title" style="font-size: 16px;"> Send Notification </h4>
+          <p class="card-description">
+            Please fill the fields below fields to send notification
+          </p>
+          <!-- <form class="forms-sample" noValidate [formGroup]="addNotificationControl" (ngSubmit)="sendNotification()"> -->
+          <div class="form-group row" style="margin-top: 40px;">
+            <label for="exampleInputEmail2" class="col-sm-3 col-form-label"> Notification title </label>
+            <div class="col-sm-7">
+              <input type="text" class="form-control" id="exampleInputEmail2" placeholder="Enter notification title."
+                name="title" formControlName="title" (click)="hideLabel()">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="exampleInputPassword2" class="col-sm-3 col-form-label"> Notification Description </label>
+            <div class="col-sm-7">
+              <textarea rows="4" type="text" class="form-control" id="exampleInputPassword2"
+                placeholder="Enter notification description." name="body" formControlName="body" (click)="hideLabel()">
+              </textarea>
+            </div>
+          </div>
+          <div style="margin-top: 30px;">
+            <button type="submit" class="btn btn-success mr-4" [disabled]="addNotificationControl.invalid"> Send
+              Notification </button>
+            <!-- <button class="btn btn-light">Cancel</button> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,151 @@
+<div class="column">
+  <div class="col-md-6 grid-margin card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title" style="font-size: 16px;"> Add Teacher </h4>
+        <p class="card-description">
+          Please fill the below fields to add new teacher.
+        </p>
+        <form class="forms-sample" noValidate [formGroup]="addTeacherControl" (ngSubmit)="addTeacher()">
+          <div class="form-group row" style="margin-top: 40px;">
+            <label for="exampleInputPassword2" class="col-sm-3 col-form-label"> Teacher Name </label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" id="exampleInputPassword2" placeholder="Enter teacher name"
+                name="name" formControlName="name">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="exampleInputEmail2" class="col-sm-3 col-form-label"> Teacher Subject </label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" id="exampleInputEmail2" placeholder="Enter teacher subject"
+                name="subject" formControlName="subject">
+            </div>
+          </div>
+          <div style="margin-top: 30px;">
+            <button type="submit" class="btn btn-success mr-4" [disabled]="addTeacherControl.invalid"> Add Teacher
+            </button>
+            <!-- <button class="btn btn-light">Cancel</button> -->
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title"> Courses </h4>
+        <p class="card-description">
+          Total available courses
+          <!-- <code>.table</code> -->
+        </p>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th> SNO. </th>
+                <th> Name </th>
+                <th> Subject </th>
+                <th> Status </th>
+                <th> Edit </th>
+                <th> Delete </th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let teacher of this.teacherList; let i = index">
+                <tr>
+                  <td>
+                    {{ i + 1}}.
+                  </td>
+                  <td>
+                    {{ teacher.teacherName }}
+                  </td>
+                  <td>
+                    {{ teacher.teacherSubject }}
+                  </td>
+                  <td>
+                    <span *ngIf="teacher.status">
+                      <div class="form-check form-check-dark">
+                        <label class="form-check-label">
+                          <input style="height: 16px; width: 16px; cursor: pointer;" type="checkbox" checked
+                            (click)="updateStatus(teacher.teacherId, teacher.status )">
+                          <!-- <i class="input-helper"></i> -->
+                        </label>
+                      </div>
+                    </span>
+                    <span *ngIf="!teacher.status">
+                      <div style="cursor: pointer;" class="form-check form-check-dark">
+                        <label class="form-check-label">
+                          <input style="height: 14px; width: 16px; cursor: pointer;" type="checkbox"
+                            (click)="updateStatus(teacher.teacherId, teacher.status)" />
+                          <!-- <i class="input-helper"></i> -->
+                        </label>
+                      </div>
+                    </span>
+                  </td>
+
+                  <!-- Edit -->
+                  <td>
+                    <button style="font-size: 13px;" class="btn btn-xs btn-inverse-success btn-rounded btn-fw"
+                      (click)="open(mymodal, teacher)">
+                      Edit teacher
+                    </button>
+                    <!-- Dialog Content -->
+                    <ng-template #mymodal let-modal>
+                      <div *ngIf="this.teacher"
+                        style="width: 250px; height: 270px; text-align: center; margin-left: 100px;">
+                        <h3> Edit course code and course Name </h3>
+                        <form class="forms-sample" noValidate [formGroup]="editControl"
+                          (ngSubmit)="editTeacher(teacher.teacherId, this.teacher.teacherName, this.teacher.teacherSubject)">
+                          <div class="form-group row" style="margin-top: 40px;">
+                            <label for="exampleInputEmail2" class="col-sm-3 col-form-label"> Teacher Name </label>
+                            <div class="col-sm-9">
+                              <input type="text" class="form-control" id="exampleInputEmail2"
+                                placeholder="Enter course code" [value]="this.teacher.teacherName" name="name"
+                                formControlName="name" required>
+                            </div>
+                          </div>
+                          <div class="form-group row">
+                            <label for="exampleInputPassword2" class="col-sm-3 col-form-label"> Teacher Subject </label>
+                            <div class="col-sm-9">
+                              <input type="text" class="form-control" id="exampleInputPassword2"
+                                placeholder="Enter course name" [value]="this.teacher.teacherSubject" name="subject"
+                                formControlName="subject" required>
+                            </div>
+                          </div>
+                          <button type="submit" class="btn btn-success mr-4"> Edit Teacher </button>
+                        </form>
+                      </div>
+                    </ng-template>
+                  </td>
+
+                  <!-- Delete -->
+                  <td>
+                    <button style="font-size: 13px;" class="btn btn-xs btn-inverse-danger btn-rounded btn-fw"
+                      (click)="openDelete(mymodal2, teacher)">
+                      Delete Teacher
+                    </button>
+                    <ng-template #mymodal2 let-modal>
+                      <div style=" height: 130px; align-items: center; margin-top: 50px; margin-left: 80px;">
+                        <label> Are you sure you want to delete this teacher ?</label>
+                        <button style="font-size: 13px; margin-left: 30px;"
+                          class="btn btn-xs btn-inverse-success btn-rounded btn-fw"
+                          (click)="deleteVideo(teacher.teacherId)">
+                          Yes
+                        </button>
+                        &nbsp; &nbsp; &nbsp; &nbsp;
+                        <button style="font-size: 13px;" class="btn btn-xs btn-inverse-danger btn-rounded btn-fw"
+                          (click)="closeModal()">
+                          Cancel
+                        </button>
+                      </div>
+                    </ng-template>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>

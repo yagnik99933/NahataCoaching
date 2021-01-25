@@ -1,0 +1,248 @@
+<div class="col-12 grid-margin">
+  <div class="card">
+    <div class="card-body">
+      <h4 class="card-title" style="font-size: 16px;"> Add Questions
+        <label style="color: blue; margin-left: 400px;"> Total Marks &nbsp;&nbsp;: &nbsp;&nbsp;{{ this.totalMarks
+          }}</label>
+      </h4>
+      <!-- <h4 class="card-title"  style="font-size: 16px; margin-left: 160px;">  </h4> -->
+      <form class="form-sample" noValidate [formGroup]="addQuestionControl"
+        (ngSubmit)="addQuestion(this.questionMarks, this.negativeMarks)">
+        <p class="card-description">
+          Question Details
+        </p>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group row">
+              <label class="col-sm-3 col-form-label"> Question Text </label>
+              <div class="col-sm-9">
+                <textarea type="text" class="form-control" rows="4" placeholder="Enter question here..." name="text"
+                  formControlName="text" required></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group row">
+              <label class="col-sm-3 col-form-label"> Option A </label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" rows="3" placeholder="Enter option A" required name="optionA"
+                  formControlName="optionA" />
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group row">
+              <label class="col-sm-3 col-form-label"> Option B </label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" placeholder="Enter option B" required name="optionB"
+                  formControlName="optionB" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group row">
+              <label class="col-sm-3 col-form-label"> Option C </label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" rows="3" placeholder="Enter option C" required name="optionC"
+                  formControlName="optionC" />
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group row">
+              <label class="col-sm-3 col-form-label"> Option D </label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" placeholder="Enter option D" required name="optionD"
+                  formControlName="optionD" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p class="card-description" style="margin-top: 30px;">
+          Correct Options & Marks
+        </p>
+        <div class="row">
+          <div class="col-md-10">
+            <div class="form-group row" style="margin-top: 10px;">
+              <label class="col-sm-3 col-form-label"> Correct Option </label>
+              <div class="col-sm-9">
+                <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
+                  name="correctOption" formControlName="correctOption" [(ngModel)]="correctOption">
+                  <mat-radio-button class="example-radio-button" color="primary" *ngFor="let option of options"
+                    [value]="option" required>
+                    {{ option }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                  </mat-radio-button>
+                </mat-radio-group>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group row" style="margin-top: 15px;">
+              <label class="col-sm-3 col-form-label"> Question Marks </label>
+              <div class="col-sm-9">
+                <input type="number" class="form-control" placeholder="Enter marks " [value]="this.questionMarks"
+                  name="questionMarks" formControlName="questionMarks" />
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group row" style="margin-top: 15px;">
+              <label class="col-sm-3 col-form-label"> Negative Marks </label>
+              <div class="col-sm-9">
+                <input type="number" class="form-control" placeholder="Enter negative marks"
+                  [value]="this.negativeMarks" name="negativeMarks" formControlName="negativeMarks" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <p class="card-description" style="margin-top: 30px;">
+          Upload image
+        </p>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group row">
+              <label class="col-sm-3 col-form-label"> Choose Image </label>
+              <div class="col-sm-9">
+                <input type="file" (change)="handleFiles($event)" accept=".png,.jpg,.jpeg," style="font-size: 14px;"
+                  name="file" formControlName="image" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 15px;" *ngIf="!this.showLabel && this.uploadLabel">
+          <span style="color: blue;  letter-spacing: 2px; font-size: 14px;">
+            Uploading ....
+          </span>
+        </div>
+        <div style="margin-top: 15px;" *ngIf="this.showLabel">
+          <span style="color: rgb(12, 240, 12); word-spacing: 2px; letter-spacing: 1px;"> Question Added Successfully.
+          </span>
+        </div>
+
+        <div style="margin-top: 30px; text-align: center;">
+          <button [disabled]=" this.addQuestionControl.invalid " type="submit" class="btn btn-success">
+            <i class="mdi mdi-cloud-download"></i>
+            Upload Question
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Table -->
+<div class="row">
+  <div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title"> Test </h4>
+        <!-- <p class="card-description">
+          Total subjects in subject
+        </p> -->
+        <div style="color: rgb(233, 39, 39);" *ngIf="!this.showQuestion">
+          No questions in selected subject.
+        </div>
+        <div class="table-responsive">
+          <div *ngIf="this.showQuestion">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th> SNO. </th>
+                  <th> Text </th>
+                  <th> Option A </th>
+                  <th> Option B </th>
+                  <th> Option C </th>
+                  <th> Option D </th>
+                  <th> Correct Option </th>
+                  <th> Marks </th>
+                  <th> Negative Marks </th>
+                  <th> Preview Image </th>
+                  <th> Delete Question </th>
+                  <!-- <th> Status </th> -->
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngFor="let question of this.questionList; let i = index">
+                  <tr>
+                    <td style="text-align: center;">
+                      {{ i + 1 }}
+                    </td>
+                    <td style="max-width: 250px; word-wrap:break-word; height: auto; overflow: hidden;">
+                      {{ question.questionText }}
+
+                    </td>
+
+                    <td>
+                      {{ question.optionA }}
+                    </td>
+                    <td>
+                      {{ question.optionB }}
+                    </td>
+                    <td>
+                      {{ question.optionC }}
+                    </td>
+                    <td>
+                      {{ question.optionD }}
+                    </td>
+                    <td style="text-align: center;">
+                      {{ question.correctOption }}
+                    </td>
+                    <td style="text-align: center;">
+                      {{ question.questionMarks }}
+                    </td>
+                    <td style="text-align: center;">
+                      {{ question.negativeMarks }}
+                    </td>
+
+                    <td>
+                      <button style="font-size: 13px;" [disabled]="!question.imageUrl"
+                        class="btn btn-xs btn-inverse-success btn-rounded btn-fw" (click)="openPreview(mymodal1)">
+                        View Image
+                      </button>
+                      <!-- Dialog Content -->
+                      <ng-template #mymodal1 let-modal>
+                        <div style="align-items: center;">
+                          <img [src]="question.imageUrl" style="width: 100%; border: 0;" alt="banner">
+                        </div>
+                      </ng-template>
+                    </td>
+                    <td>
+                      <button style="font-size: 13px;" class="btn btn-xs btn-inverse-danger btn-rounded btn-fw"
+                        (click)="deleteQuestion(question.imageUrl, question.questionMarks, question.questionId)">
+                        Delete Question
+                      </button>
+                    </td>
+                    <!-- <td>
+                      <div *ngIf="question.status">
+                        <label class="badge badge-success">
+                          active
+                        </label>
+                      </div>
+                      <div *ngIf="!question.status">
+                        <label class="badge badge-danger">
+                          Not active
+                        </label>
+                      </div>
+                    </td> -->
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

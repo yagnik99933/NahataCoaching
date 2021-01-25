@@ -1,0 +1,23 @@
+.mat-slide-toggle-thumb {
+  width: 10px !important;
+  height: 10px !important;
+  transform: translate(50%, 50%);
+}
+
+.mat-slide-toggle-bar {
+background-color: black;
+border-radius: 15px !important;
+height: 16px !important;
+}
+
+.mat-slide-toggle-thumb-container {
+top: -2px !important;
+}
+
+.mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar {
+background-color: rgb(19, 202, 235);
+}
+
+.mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-thumb {
+background-color: #fff;
+}

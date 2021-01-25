@@ -1,0 +1,103 @@
+<div class="col-lg-12 grid-margin stretch-card">
+  <div class="card">
+    <div class="card-body">
+      <!-- <h4 class="card-title"> News /  Feed </h4> -->
+      <div style="margin-bottom: 25px;">
+        <button type="button" value="Download PDF" class="btn btn-success" (click)="SavePDF()">
+          <i class="mdi mdi-cloud-download"></i>
+          Download as PDF
+        </button>
+      </div>
+
+<div class="table-responsive" class="container" id="content" #content>
+
+  <div class="form-group row" >
+
+    <label for="exampleInputPassword2" class="col-sm-7 col-form-label"
+      style="padding: 0px 12px 0px; margin-top: 15px; font-size: 16px; font-weight: 500;">
+      Course  : &nbsp;&nbsp; {{ this.courseName }} &nbsp;&nbsp; ({{ this.courseId }})
+    </label>
+    <label for="exampleInputPassword2" class="col-sm-5 col-form-label"
+      style="padding:  0px 12px 0px; color: blue; margin-top: 15px;font-size: 16px; font-weight: 500;">
+      Total Marks &nbsp; : &nbsp;&nbsp; {{ this.totalMarks }}
+    </label>
+
+  </div>
+
+  <div class="form-group row" >
+
+    <label for="exampleInputPassword2" class="col-sm-7 col-form-label"
+      style="padding: 0px 12px 0px; margin-top: 5px; font-size: 16px; font-weight: 500;">
+      Subject  : &nbsp;&nbsp; {{ this.subjectName }} &nbsp;&nbsp; ({{ this.subjectId }})
+    </label>
+    <label for="exampleInputPassword2" class="col-sm-5 col-form-label"
+      style="padding:  0px 12px 0px; color: blue; margin-top: 5px;font-size: 16px; font-weight: 500;">
+      Timings(in min.) &nbsp; : &nbsp;&nbsp; {{ this.testTimings }}
+    </label>
+
+  </div>
+
+  <div class="form-group row" >
+
+    <label for="exampleInputPassword2" class="col-sm-7 col-form-label"
+      style="padding: 0px 12px 0px; margin-top: 5px; font-size: 16px; font-weight: 500;">
+      Test &nbsp;&nbsp;&nbsp;&nbsp; : &nbsp;&nbsp; {{ this.testName }} &nbsp;&nbsp; ({{ this.testId }})
+    </label>
+
+  </div>
+  <table class="table ">
+    <thead>
+      <tr>
+        <th>
+          SNO.
+        </th>
+        <th>
+          Name of student
+        </th>
+        <!-- <th>
+          Mobile Number
+        </th> -->
+        <th >
+          Secured Marks
+        </th>
+        <th>
+          Test Submitted
+        </th>
+        <th>
+          View Result
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let result of this.resultList; let i = index;" >
+      <tr *ngIf="this.securedMarks">
+        <td>
+          {{ i + 1 }}.
+        </td>
+        <td>
+           {{ result.name|titlecase }}
+         </td>
+         <!-- <td>
+           {{ result.studentId }}
+         </td> -->
+         <td>
+          {{ this.securedMarks[i]  }}
+        </td>
+         <td >
+          {{ result.entryDate | date: 'shortTime'}}
+         </td>
+         <td>
+          <button style="font-size: 13px;"
+            class="btn btn-xs btn-inverse-success btn-rounded btn-fw"
+            (click)="loadStudentResult(this.courseId, this.subjectId, result.studentId, this.testId, this.testName)">
+              View Result
+          </button>
+         </td>
+        </tr>
+        </ng-container>
+    </tbody>
+  </table>
+</div>
+</div>
+</div>
+</div>

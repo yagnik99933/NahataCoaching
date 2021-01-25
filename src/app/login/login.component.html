@@ -1,0 +1,63 @@
+<div class="container">
+  <div class="forms-container">
+    <div class="signin-signup">
+      <form class="sign-in-form" novalidate #loginForm="ngForm" (ngSubmit)="onSubmit()">
+        <h2 class="title">Sign in</h2>
+        <div class="input-field">
+          <div style="margin-top: 13px; margin-left: 7px;">
+            <i class="fas fa-user"></i>
+          </div>
+          <input placeholder="Username" type="text" [(ngModel)]="admin.username"
+          name="mobileNo" #username="ngModel" required/>
+        </div>
+        <div class="input-field">
+          <div style="margin-top: 13px; margin-left: 7px;">
+            <i class="fas fa-lock"></i>
+          </div>
+          <input type="password" placeholder="Password" [(ngModel)]="admin.password"
+          name="password" #username="ngModel" required/>
+        </div>
+
+        <button *ngIf="!this.showLoader" type="submit" value="Login" class="btn solid" >
+          Login
+        </button>
+        <button *ngIf="this.showLoader" class="btn btn-primary" type="button" disabled>
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          Loading...
+        </button>
+        <div *ngIf="this.error">
+          <div style="color: red;"> Enter Valid Username or Password </div>
+        </div>
+        <!-- <p class="social-text">Or Sign in with social platforms</p> -->
+        <!-- <div class="social-media">
+          <a href="#" class="social-icon">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+          <a href="#" class="social-icon">
+            <i class="fab fa-twitter"></i>
+          </a>
+          <a href="#" class="social-icon">
+            <i class="fab fa-google"></i>
+          </a>
+          <a href="#" class="social-icon">
+            <i class="fab fa-linkedin-in"></i>
+          </a>
+        </div> -->
+      </form>
+    </div>
+  </div>
+
+  <div class="panels-container">
+    <div class="panel left-panel">
+      <div class="content">
+        <img style="margin-bottom: 350px; margin-right: 50px;" src="/assets/images/icon.png" alt="Logo" width="200px" height="200px">
+      </div>
+      <!-- <img src="img/log.svg" class="image" alt="" /> -->
+    </div>
+
+  </div>
+
+  <div>
+
+  </div>
+</div>

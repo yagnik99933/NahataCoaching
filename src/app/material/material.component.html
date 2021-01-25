@@ -1,0 +1,296 @@
+<div class="row">
+  <div class="col-lg-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h2 style="font-size: 16px;" class="card-title">Courses List</h2>
+        <p class="card-description">
+          Select the course in which you want to add material
+        </p>
+        <div class="template-demo">
+          <div ngbDropdown class="d-inline-block">
+            <div>
+              <button style="max-width: 100%; " class="btn btn-outline-primary" type="button"
+                id="dropdownMenuOutlineButton1" ngbDropdownToggle>
+                <span style="letter-spacing: 1px; word-spacing: 2px; font-size: 15px;" *ngIf="!this.showCourseName">
+                  Select Course </span>
+                <span style="letter-spacing: 1px; word-spacing: 2px; font-size: 15px;" *ngIf="this.showCourseName">
+                  Course selected </span>
+              </button>
+            </div>
+            <div ngbDropdownMenu aria-labelledby="dropdownMenuOutlineButton1">
+              <h6 class="dropdown-header">-Courses-</h6>
+              <br />
+              <ng-container *ngFor="let course of this.courseList; let i = index">
+                <a *ngIf="course.status" style="
+                    width: 40em;
+                    font-size: 14px;
+                    word-spacing: 3px;
+                    letter-spacing: 1px;" class="dropdown-item"
+                  (click)="getCourseId(course.courseName, course.courseCode, course.courseId, course.subject)">
+                  {{ course.courseCode }} - {{ course.courseName }}
+                </a>
+                <div class="dropdown-divider"></div>
+              </ng-container>
+            </div>
+            <div *ngIf="this.courseCode" style="margin-top: 20px; color: blue; font-size: 14px;">
+              <label> Course Selected : </label>
+              {{ this.courseCode}} - {{ this.courseName }}
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Subject List -->
+      <div class="card-body">
+        <h2 style="font-size: 16px;" class="card-title">Subject List</h2>
+        <p class="card-description">
+          Select the subject in which you want to add material
+        </p>
+        <div class="template-demo">
+          <div ngbDropdown class="d-inline-block">
+            <div>
+              <button style="max-width: 100%" class="btn btn-outline-primary" type="button"
+                id="dropdownMenuOutlineButton1" ngbDropdownToggle>
+                <span style="letter-spacing: 1px; word-spacing: 2px; font-size: 15px;" *ngIf="!this.showSubjectName">
+                  Select Subject </span>
+                <span style="letter-spacing: 1px; word-spacing: 2px; font-size: 15px;" *ngIf="this.showSubjectName">
+                  Subject selected </span>
+              </button>
+            </div>
+            <div ngbDropdownMenu aria-labelledby="dropdownMenuOutlineButton1">
+              <h6 class="dropdown-header">-Subjects-</h6>
+              <br />
+              <ng-container *ngFor="let subject of this.subjectList; let i = index">
+                <a *ngIf="subject.status" style="
+                    width: 40em;
+                    font-size: 14px;
+                    word-spacing: 3px;
+                    letter-spacing: 1px;" class="dropdown-item"
+                  (click)="getSubjectId(subject.subjectName, subject.subjectCode, subject.subjectId, subject.material)">
+                  {{ subject.subjectCode }} - {{ subject.subjectName }}
+                </a>
+                <div class="dropdown-divider"></div>
+              </ng-container>
+            </div>
+            <div *ngIf="this.subjectCode" style="margin-top: 20px; color: blue; font-size: 14px;">
+              <label> Subject Selected : </label>
+              {{ this.subjectCode}} - {{ this.subjectName }}
+            </div>
+            <!-- <div *ngIf="!this.contains" style="margin-top: 20px; font-size: 14px;">
+              <label style="color: red;"> There are no subjects in selected course. </label>
+            </div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 grid-margin card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title"> Add Material </h4>
+        <p *ngIf="!this.courseId && !this.subjectId" class="card-description" style="color: red; font-size: 13px;">
+          Note: Please select course and subject to add material.
+        </p>
+        <form class="forms-sample" noValidate [formGroup]="addMaterialControl" (ngSubmit)="uploadFile()">
+          <div class="form-group row" style="margin-top: 40px">
+            <label for="exampleInputEmail2" class="col-sm-3 col-form-label">
+              Material name
+            </label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" id="exampleInputEmail2" placeholder="Enter video name" name="name"
+                formControlName="name" required />
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="exampleInputPassword2" class="col-sm-3 col-form-label">
+              Material Type
+            </label>
+            <div class="col-sm-9">
+              <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group" name="fileType"
+                formControlName="fileType" [(ngModel)]="fileType">
+                <mat-radio-button class="example-radio-button" color="primary" *ngFor="let type of types"
+                  [value]="type">
+                  {{ type }} &nbsp;&nbsp;
+                </mat-radio-button>
+              </mat-radio-group>
+              <!-- <input
+                type="radio"
+                class="form-control"
+                id="exampleInputPassword2"
+                placeholder="Enter video link"
+                name="link"
+                formControlName="link" required/> -->
+            </div>
+          </div>
+          <div class="col-sm-12">
+            <input type="file" (change)="handleFiles($event)" accept=".png,.jpg,.jpeg,.pdf" style="font-size: 14px;"
+              name="image" formControlName="image" />
+          </div>
+          <div style="margin-top: 15px;" *ngIf="!this.showLabel && this.uploadLabel">
+            <span style="color: blue;  letter-spacing: 2px; font-size: 14px;">
+              Uploading ....
+            </span>
+          </div>
+          <div style="margin-top: 15px;" *ngIf="this.showLabel">
+            <span style="color: rgb(12, 240, 12); word-spacing: 2px; letter-spacing: 1px;"> Upload Successfull. </span>
+          </div>
+          <div style="margin-top: 30px">
+            <button [disabled]="!this.courseId ||!this.subjectId || this.addMaterialControl.invalid " type="submit"
+              class="btn btn-success">
+              <i class="mdi mdi-cloud-download"></i>
+              Upload Material
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Table -->
+<div class="row">
+  <div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title"> Material </h4>
+        <!-- <p class="card-description">
+          Total subjects in subject
+        </p> -->
+        <div style="color: rgb(233, 39, 39);" *ngIf="!this.showDiv2">
+          No material in selected subject.
+        </div>
+        <div class="table-responsive">
+          <div *ngIf="this.showDiv2">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th> SNO. </th>
+                  <th> Name </th>
+                  <th> Type </th>
+                  <th> Status </th>
+                  <th> Edit </th>
+                  <th> Delete </th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngFor="let material of this.materialList; let i = index">
+                  <tr>
+                    <td>
+                      {{ i + 1 }}
+                    </td>
+                    <td>
+                      {{ material.materialName }}
+                    </td>
+                    <td>
+                      {{ material.fileType }}
+                    </td>
+                    <td>
+                      <span *ngIf="material.status">
+                        <div class="form-check form-check-dark">
+                          <label class="form-check-label">
+                            <input style="height: 16px; width: 16px; cursor: pointer;" type="checkbox" checked
+                              (click)="updateStatus(material.materialId, material.status )">
+                            <!-- <i class="input-helper"></i> -->
+                          </label>
+                        </div>
+                      </span>
+                      <span *ngIf="!material.status">
+                        <div style="cursor: pointer;" class="form-check form-check-dark">
+                          <label class="form-check-label">
+                            <input style="height: 14px; width: 16px; cursor: pointer;" type="checkbox"
+                              (click)="updateStatus(material.materialId, material.status)" />
+                            <!-- <i class="input-helper"></i> -->
+                          </label>
+                        </div>
+                      </span>
+                    </td>
+
+                    <!-- Edit -->
+                    <td>
+                      <button style="font-size: 13px;" class="btn btn-xs btn-inverse-success btn-rounded btn-fw"
+                        (click)="open(mymodal, material)">
+                        Edit Material
+                      </button>
+                      <!-- Dialog Content -->
+                      <ng-template #mymodal let-modal>
+                        <div *ngIf="this.material"
+                          style="width: 450px; height: 300px; text-align: center; margin-left: 30px;">
+                          <h3> Edit Material </h3>
+                          <form class="forms-sample" noValidate [formGroup]="editControl"
+                            (ngSubmit)="editMaterial(courseId, subjectId, material.materialId, material.materialName, material.fileType, material.materialLink)">
+                            <div class="form-group row" style="margin-top: 40px">
+                              <label for="exampleInputEmail2" class="col-sm-3 col-form-label">
+                                Material name
+                              </label>
+                              <div class="col-sm-9">
+                                <input type="text" class="form-control" id="exampleInputEmail2"
+                                  placeholder="Enter video name" name="name" formControlName="name"
+                                  [value]="this.material.materialName" required />
+                              </div>
+                            </div>
+                            <div class="form-group row">
+                              <label for="exampleInputPassword2" class="col-sm-3 col-form-label">
+                                Material Type
+                              </label>
+                              <div class="col-sm-6">
+                                <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
+                                  name="fileType" formControlName="fileType" [(ngModel)]="fileType">
+
+                                  <mat-radio-button class="example-radio-button" color="primary"
+                                    *ngFor="let type of types" [value]="type" [checked]="type===this.material.fileType">
+                                    {{ type }} &nbsp;&nbsp;
+                                  </mat-radio-button>
+                                </mat-radio-group>
+                              </div>
+                            </div>
+                            <div class="col-sm-8">
+                              <input type="file" (change)="handleFiles($event)" accept=".png,.jpg,.jpeg,.pdf"
+                                style="font-size: 14px;" name="image" formControlName="image" />
+                            </div>
+                            <div style="margin-top: 15px;" *ngIf="!this.showLabel && this.uploadLabel">
+                              <span style="color: blue;  letter-spacing: 2px; font-size: 14px;">
+                                Uploading ....
+                              </span>
+                            </div>
+
+                            <button style="margin-top: 20px;" type="submit" class="btn btn-success mr-4"> Edit Material
+                            </button>
+                          </form>
+                        </div>
+                      </ng-template>
+                    </td>
+
+                    <!-- Delete -->
+                    <td>
+                      <button style="font-size: 13px;" class="btn btn-xs btn-inverse-danger btn-rounded btn-fw"
+                        (click)="openDelete(mymodal2, material)">
+                        Delete Material
+                      </button>
+                      <ng-template #mymodal2 let-modal>
+                        <div style=" height: 130px; align-items: center; margin-top: 50px; margin-left: 80px;">
+                          <label> Are you sure you want to delete this material ?</label>
+                          <button style="font-size: 13px; margin-left: 30px;"
+                            class="btn btn-xs btn-inverse-success btn-rounded btn-fw"
+                            (click)="deleteMaterial(courseId, subjectId,material.materialId, material.materialLink)">
+                            Yes
+                          </button>
+                          &nbsp; &nbsp; &nbsp; &nbsp;
+                          <button style="font-size: 13px;" class="btn btn-xs btn-inverse-danger btn-rounded btn-fw"
+                            (click)="closeModal()">
+                            Cancel
+                          </button>
+                        </div>
+                      </ng-template>
+                    </td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

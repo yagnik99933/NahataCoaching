@@ -1,0 +1,202 @@
+<div class="row">
+  <div class="col-lg-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h2 style="font-size: 16px;" class="card-title">Courses List</h2>
+        <p class="card-description">
+          Select the course in which you want to add subjects
+        </p>
+        <div class="template-demo">
+          <div ngbDropdown class="d-inline-block">
+            <div>
+              <button style="max-width: 100%; " class="btn btn-outline-primary" type="button"
+                id="dropdownMenuOutlineButton1" ngbDropdownToggle>
+                <span style="letter-spacing: 1px; word-spacing: 2px; font-size: 15px;" *ngIf="!this.showCourseName">
+                  Select Course </span>
+                <span style="letter-spacing: 1px; word-spacing: 2px; font-size: 15px;" *ngIf="this.showCourseName">
+                  Course selected </span>
+              </button>
+            </div>
+            <div ngbDropdownMenu aria-labelledby="dropdownMenuOutlineButton1">
+              <h6 class="dropdown-header">-Courses-</h6>
+              <div class="dropdown-divider"></div>
+              <ng-container *ngFor="let course of this.courseList; let i = index">
+                <a *ngIf="course.status" style="
+                    width: 41em;
+                    font-size: 14px;
+                    word-spacing: 3px;
+                    letter-spacing: 1px;" class="dropdown-item"
+                  (click)="getCourseId(course.courseName, course.courseCode, course.courseId, course.subject)">
+                  {{ course.courseCode }} - {{ course.courseName }}
+                </a>
+                <div class="dropdown-divider"></div>
+              </ng-container>
+            </div>
+            <div *ngIf="this.courseCode" style="margin-top: 15px; color: blue; font-size: 14px;">
+              <label> Course Selected : </label>
+              {{ this.courseCode}} - {{ this.courseName }}
+            </div>
+            <!-- <div *ngIf="this.selectedCourse">
+              Selected Course {{ course.code }} - {{ course.name }}
+            </div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 grid-margin card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Add Subject</h4>
+        <p class="card-description">
+          Please fill the below fields to add new subject.
+        </p>
+        <form class="forms-sample" noValidate [formGroup]="addSubjectControl" (ngSubmit)="addSubject()">
+          <div class="form-group row" style="margin-top: 40px">
+            <label for="exampleInputEmail2" class="col-sm-3 col-form-label">
+              Subject Code
+            </label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" id="exampleInputEmail2" placeholder="Enter subject code"
+                name="code" formControlName="code" />
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="exampleInputPassword2" class="col-sm-3 col-form-label">
+              Subject Name
+            </label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" id="exampleInputPassword2" placeholder="Enter subject name"
+                name="name" formControlName="name" />
+            </div>
+          </div>
+          <div style="margin-top: 30px">
+            <button type="submit" class="btn btn-success mr-4" [disabled]="addSubjectControl.invalid">
+              Add subject
+            </button>
+            <!-- <button class="btn btn-light">Cancel</button> -->
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Subjects</h4>
+        <!-- <p class="card-description">
+          Total subjects in subject
+        </p> -->
+        <div style="color: rgb(233, 39, 39);" *ngIf="this.showDiv">
+          No subjects in selected course.
+        </div>
+        <div class="table-responsive">
+          <div *ngIf="!this.showDiv">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>SNO.</th>
+                  <th>Code</th>
+                  <th>Name</th>
+                  <th>Status</th>
+                  <th>Edit</th>
+                  <th>Delete</th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngFor="let subject of this.subjectList; let i = index">
+                  <tr>
+                    <td>
+                      {{ i + 1 }}
+                    </td>
+                    <td>
+                      {{ subject.subjectCode }}
+                    </td>
+                    <td>
+                      {{ subject.subjectName }}
+                    </td>
+
+                    <td>
+                      <span *ngIf="subject.status">
+                        <input type="checkbox" class="checkbox" checked
+                          (click)="updateStatus(subject.subjectId, subject.status, courseId )">
+                      </span>
+                      <span *ngIf="!subject.status">
+                        <input type="checkbox" class="checkbox"
+                          (click)="updateStatus(subject.subjectId, subject.status, courseId)" />
+                      </span>
+                    </td>
+
+                    <td>
+                      <button style="font-size: 13px;" class="btn btn-xs btn-inverse-success btn-rounded btn-fw"
+                        (click)="open(mymodal, subject)">
+                        Edit subject
+                      </button>
+                      <!-- Dialog Content -->
+                      <ng-template #mymodal let-modal>
+                        <div *ngIf="this.subject" style="width: 100%; text-align: center;">
+                          <h3> Edit subject code and subject Name </h3>
+
+                          <form class="forms-sample" noValidate [formGroup]="editControl"
+                            (ngSubmit)="editSubject(courseId, subject.subjectId, this.subject.subjectCode, this.subject.subjectName)">
+                            <div class="form-group row" style="margin-top: 40px;">
+                              <label for="exampleInputEmail2" class="col-sm-3 col-form-label"> Course Code </label>
+                              <div class="col-sm-9">
+                                <input type="text" class="form-control" id="exampleInputEmail2"
+                                  placeholder="Enter subject code" [value]="this.subject.subjectCode" name="code"
+                                  formControlName="code">
+                              </div>
+                            </div>
+                            <div class="form-group row">
+                              <label for="exampleInputPassword2" class="col-sm-3 col-form-label"> Course Name </label>
+                              <div class="col-sm-9">
+                                <input type="text" class="form-control" id="exampleInputPassword2"
+                                  placeholder="Enter subject name" [value]="this.subject.subjectName" name="name"
+                                  formControlName="name">
+                              </div>
+                            </div>
+                            <button type="submit" class="btn btn-success mr-4"> Edit Course </button>
+                          </form>
+                        </div>
+                      </ng-template>
+                    </td>
+
+                    <!-- Delete -->
+                    <td>
+                      <button style="font-size: 13px;" class="btn btn-xs btn-inverse-danger btn-rounded btn-fw"
+                        (click)="openDelete(mymodal2, subject)">
+                        Delete Subject
+                      </button>
+                      <ng-template #mymodal2 let-modal>
+                        <div style=" height: 130px; align-items: center; margin-top: 50px; margin-left: 80px;">
+                          <label> Are you sure you want to delete this subject ?</label>
+                          <button style="font-size: 13px; margin-left: 30px;"
+                            class="btn btn-xs btn-inverse-success btn-rounded btn-fw"
+                            (click)="deleteSubject(courseId,subject.subjectId)">
+                            Yes
+                          </button>
+                          &nbsp; &nbsp; &nbsp; &nbsp;
+                          <button style="font-size: 13px;" class="btn btn-xs btn-inverse-danger btn-rounded btn-fw"
+                            (click)="closeModal()">
+                            Cancel
+                          </button>
+                        </div>
+                      </ng-template>
+                    </td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Live Lecture -->

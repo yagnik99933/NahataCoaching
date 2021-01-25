@@ -1,0 +1,66 @@
+<div class="column">
+  <div class="col-md-12 grid-margin card">
+    <div class="card">
+      <span style="font-size: 16px; font-weight: 600; margin-top: 20px; margin-left: 10px;"> Test Summary </span>
+      <div class="card-body" *ngFor=" let question of this.questionList; let i = index;">
+
+        <p class="card-description">
+          Question {{ i+1 }}. &nbsp; {{ question.questionText }}
+        </p>
+        <div class="form-group row" >
+          <label for="exampleInputPassword2" class="col-sm-6 col-form-label" style="padding: 0px 12px 0px;">
+            A. &nbsp; &nbsp; {{ question.optionA }}
+          </label>
+          <label for="exampleInputPassword2" class="col-sm-6 col-form-label" style="padding:  0px 12px 0px;">
+            B. &nbsp; &nbsp; {{ question.optionB }}
+          </label>
+        </div>
+        <div class="form-group row">
+          <label for="exampleInputPassword2" class="col-sm-6 col-form-label" style="padding:  0px 12px 0px;">
+            C. &nbsp; &nbsp; {{ question.optionC }}
+          </label>
+          <label for="exampleInputPassword2" class="col-sm-6 col-form-label" style="padding:  0px 12px 0px;">
+            D. &nbsp; &nbsp; {{ question.optionD }}
+          </label>
+        </div>
+        <div *ngIf="this.question.imageUrl" class="form-group row">
+         <img [src]="this.question.imageUrl" height="400px" width="450px">
+        </div>
+
+          <div class="form-group row" style="margin-top: 20px;">
+            <label for="exampleInputPassword2" class="col-sm-6 col-form-label" style="color: rgb(23, 23, 233); font-weight: 500;">
+              Selected Option  &nbsp; &nbsp; :  &nbsp; &nbsp; {{ this.selectedOption }}
+            </label>
+            <label for="exampleInputEmail2" class="col-sm-6 col-form-label" style="color: rgb(28, 212, 28); font-weight: 500;" >
+              Correct Option  &nbsp; &nbsp; &nbsp; :  &nbsp; &nbsp; {{ question.correctOption }}
+            </label>
+          </div>
+
+          <div class="form-group row" >
+              <label *ngIf="this.selectedOption === question.correctOption" for="exampleInputPassword2"
+                class="col-sm-8 col-form-label" style="color: rgb(28, 212, 28); padding:  0px 12px 0px; font-weight: 500;">
+                Marks Secured  &nbsp; &nbsp; :  &nbsp; &nbsp; {{ question.questionMarks }}
+              </label>
+
+              <label  *ngIf="this.selectedOption != question.correctOption && question.negativeMarks === 0" for="exampleInputPassword2"
+                class="col-sm-8 col-form-label" style="color: rgb(238, 20, 20); padding:  0px 12px 0px; font-weight: 500;">
+                Marks Secured  &nbsp; &nbsp; &nbsp; :  &nbsp; &nbsp; &nbsp; {{ question.negativeMarks }}
+              </label>
+              <label  *ngIf="this.selectedOption != question.correctOption && question.negativeMarks != 0" for="exampleInputPassword2"
+              class="col-sm-8 col-form-label" style="color: rgb(238, 20, 20); padding:  0px 12px 0px; font-weight: 500;">
+              Marks Secured  &nbsp; &nbsp; &nbsp; :  &nbsp; &nbsp; &nbsp; -{{ question.negativeMarks }}
+            </label>
+          </div>
+
+          <!-- <div style="margin-top: 30px;">
+            <button type="submit" class="btn btn-success mr-4"> Add Teacher </button>
+          </div> -->
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="!this.questionList" class="text-center">
+  <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+</div>

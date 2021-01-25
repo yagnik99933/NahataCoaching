@@ -1,0 +1,143 @@
+<div class="container">
+  <!-- <h3 class=" text-center">Messaging</h3> -->
+       <!-- <p>hello</p> -->
+       <div class="template-demo" >
+        <div ngbDropdown class="d-inline-block">
+          <div>
+            <button
+              style="max-width: 100%; "
+              class="btn btn-outline-secondary"
+              type="button"
+              id="dropdownMenuOutlineButton1"
+              ngbDropdownToggle>
+              <span style="letter-spacing: 1px; word-spacing: 2px; font-size: 15px;" *ngIf="!this.showTeacherLabel"> Select Teacher </span>
+              <span style="letter-spacing: 1px; word-spacing: 2px; font-size: 15px;" *ngIf="this.showTeacherLabel"> Teacher selected </span>
+            </button>
+          </div>
+          <div ngbDropdownMenu aria-labelledby="dropdownMenuOutlineButton1">
+            <h6 class="dropdown-header">-Teachers-</h6>
+            <br />
+            <ng-container *ngFor="let teacher of this.teacherList; let i = index">
+              <a style="
+                  width: 40em;
+                  font-size: 14px;
+                  word-spacing: 3px;
+                  letter-spacing: 1px;"
+                class="dropdown-item"
+                (click)="getTeacherId(teacher.teacherId, teacher.teacherName, teacher.teacherSubject)" >
+                {{ teacher.teacherName }} - {{ teacher.teacherSubject }}
+              </a>
+              <div class="dropdown-divider"></div>
+            </ng-container>
+          </div>
+          <div *ngIf="this.teacherId" style="margin-top: 20px; color: #05728f; font-size: 14px;">
+            <label> Teacher Selected : </label>
+            {{ this.teacherName}}  - {{ this.teacherSubject }}
+          </div>
+          <!-- <div *ngIf="this.selectedCourse">
+            Selected Course {{ course.code }} - {{ course.name }}
+          </div> -->
+        </div>
+      </div>
+
+  <div class="messaging">
+        <div class="inbox_msg">
+          <div class="inbox_people">
+            <div class="headind_srch">
+              <div class="recent_heading">
+                <h4>Recent</h4>
+              </div>
+
+              <div class="srch_bar">
+                <div class="stylish-input-group">
+                  <input type="text" class="search-bar" [(ngModel)]="searchTerm" (keyup)="filterStudentList($event)"
+                  (input)="filterStudentList($event)" placeholder="Search" id="query">
+                  <span class="input-group-addon">
+                  <button type="button"> <i class="fa fa-search" aria-hidden="true"></i> </button>
+                  </span> </div>
+              </div>
+
+            </div>
+            <div class="inbox_chat">
+              <div class="chat_list active_chat" *ngFor="let student of this.studentList;  let i=index">
+                <div class="chat_people">
+                  <button style="border: 0; max-width: 100%; text-align: center; " (click)="getStudentDetails(student.name, student.mobileNo, i)"
+                  [ngClass]="clickedIndex ===  i ? 'clicked' : 'unclicked'">
+                  <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="image"> </div>
+                  <div  class="chat_ib">
+                      <h5> {{ student.name |titlecase}} <span class="chat_date"> Click to view chat. </span></h5>
+                        <p style="margin-right: 110px;"> {{ student.mobileNo }} </p>
+                  </div>
+                </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="!this.studentMobileNo">
+            <!-- <h2 style="text-align: center; margin-top: 50px;"> Stay Connected...!!! </h2> -->
+            <img src="../../assets/images/speech-bubble.jpg" alt="image" height="606px" width="684px">
+          </div>
+          <div *ngIf="this.studentMobileNo" class="mesgs">
+            <!-- Loading spinner when chatlist is coming. -->
+            <div class="text-center">
+              <div *ngIf="!this.chatListLabel" class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+            </div>
+
+            <!-- <p> outside ngfor</p> -->
+            <div class="msg_history" *ngFor="let chat of this.chatList">
+              <!-- <p>inside ngfor</p> -->
+              <div class="incoming_msg" *ngIf="chat.sender=='student'">
+                <div class="incoming_msg_img" >
+                  <img src="https://ptetutorials.com/images/user-profile.png" alt="pro_image"> </div>
+                <div class="received_msg">
+                  <div class="received_withd_msg">
+                    <p>{{ chat.chatText }}
+                      <span class="time_date">
+                      {{ chat.entryDate | date: 'shortTime' }}    |    {{ chat.entryDate | date}}
+                      <!-- |  For - {{  }} -->
+                    </span>
+                    </p>
+
+                  </div>
+                </div>
+              </div>
+                <div class="outgoing_msg" *ngIf="chat.sender=='teacher'">
+                  <div class="sent_msg" >
+                    <p id="clientMsg" > {{ chat.chatText }}
+                      <span class="time_date" style="color: white;">
+                        {{ chat.entryDate | date: 'shortTime' }}    |    {{ chat.entryDate | date}}</span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="!this.chatList && this.chatListLabel">
+                <div class="alert alert-fill-primary" role="alert">
+                  <i class="mdi mdi-alert-circle"></i>
+                  No chat available .
+                </div>
+              </div>
+          </div>
+
+          <div *ngIf="this.chatListLabel" class="type_msg">
+            <form [formGroup]="addChatControl" (ngSubmit)="postChat()">
+              <div class="input_msg_write">
+                <input type="text" class="write_msg" placeholder="Type a message"
+                  formControlName="chatText" name="chatText" />
+                  <button class="btn btn-success" type="submit">
+                    <!-- <i class="fa fas-paper-plane-o" aria-hidden="true"></i> -->
+                    Send
+                  </button>
+              </div>
+
+            </form>
+          </div>
+          <div *ngIf="this.showTeacherLabel" class="alert alert-fill-danger" role="alert">
+            <i class="mdi mdi-alert-circle"></i>
+            Please select teacher before sending the message.
+          </div>
+        </div>
+       </div>
+</div>

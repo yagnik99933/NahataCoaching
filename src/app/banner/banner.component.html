@@ -1,0 +1,220 @@
+<div class="row">
+  <div class="col-lg-5 grid-margin card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title" style="font-size: 14px; font-weight: bold;"> Add Banner </h4>
+        <p class="card-description">
+          You can choose a file to upload
+        </p>
+        <form [formGroup]="addImageControl" class="forms-sample">
+          <div class="form-group row" style="margin-top: 40px;">
+            <!-- <label  for="exampleInputEmail2" class="col-sm-3 col-form-label" for="file">File:</label> -->
+            <div class="col-sm-12">
+              <input type="file" (change)="handleFiles($event)" accept=".png,.jpg,.jpeg" style="font-size: 14px;"
+                name="image" formControlName="image" />
+            </div>
+          </div>
+          <div style="margin-top: 15px;" *ngIf="!this.showLabel && this.uploadLabel">
+            <span style="color: blue;  letter-spacing: 2px; font-size: 14px;">
+              Uploading ....
+            </span>
+          </div>
+          <div style="margin-top: 15px;" *ngIf="this.showLabel">
+            <span style="color: rgb(12, 240, 12); word-spacing: 2px; letter-spacing: 1px;"> Upload Successfull. </span>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-7 grid-margin card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title" style="font-size: 14px; font-weight: bold;"> Add Name & Description </h4>
+        <!-- <p class="card-description">
+          Please fill the below fields to add new subject.
+        </p> -->
+        <form class="forms-sample" noValidate [formGroup]="addBannerControl" (ngSubmit)="uploadFile()">
+          <div class="form-group row" style="margin-top: 40px">
+            <label for="exampleInputEmail2" class="col-sm-3 col-form-label">
+              Name
+            </label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" id="exampleInputEmail2" placeholder="Enter name" name="name"
+                formControlName="name" />
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="exampleInputPassword2" class="col-sm-3 col-form-label">
+              Description
+            </label>
+            <div class="col-sm-9">
+              <textarea type="text" class="form-control" id="exampleInputPassword2" placeholder="Enter description"
+                name="description" formControlName="description"></textarea>
+            </div>
+          </div>
+          <div style="margin-top: 30px">
+            <button type="submit" class="btn btn-success" [disabled]="addBannerControl.invalid || !this.buttonStatus">
+              <i class="mdi mdi-cloud-download"></i>
+              Upload
+            </button>
+            <!-- <button class="btn btn-light">Cancel</button> -->
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="col-lg-12 grid-margin stretch-card">
+  <div class="card">
+    <div class="card-body">
+      <h4 class="card-title" style="font-size: 14px; font-weight: bold;"> Banners </h4>
+      <p class="card-description">
+        Total available Banners
+
+      </p>
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th> SNO. </th>
+              <th> Name </th>
+              <th> Description </th>
+              <!-- <th> EntryDate </th> -->
+              <th> Status </th>
+              <th> Preview </th>
+              <th> Edit </th>
+              <th> Delete </th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let banner of this.bannerList; let i = index">
+              <tr>
+                <td>
+                  {{ i + 1}}
+                </td>
+                <td>
+                  {{ banner.bannerName }}
+                </td>
+                <td>
+                  {{ banner.bannerDescription }}
+                </td>
+                <!-- <td>
+                  {{ banner.entryDate | date}}
+                </td> -->
+                <td>
+                  <span *ngIf="banner.status">
+                    <div class="form-check form-check-dark">
+                      <label class="form-check-label">
+                        <input style="height: 16px; width: 16px; cursor: pointer;" type="checkbox" checked
+                          (click)="updateStatus(banner.bannerId, banner.status )">
+                        <!-- <i class="input-helper"></i> -->
+                      </label>
+                    </div>
+                  </span>
+                  <span *ngIf="!banner.status">
+                    <div style="cursor: pointer;" class="form-check form-check-dark">
+                      <label class="form-check-label">
+                        <input style="height: 14px; width: 16px; cursor: pointer;" type="checkbox"
+                          (click)="updateStatus(banner.bannerId, banner.status)" />
+                        <!-- <i class="input-helper"></i> -->
+                      </label>
+                    </div>
+                  </span>
+                </td>
+
+                <td>
+                  <button style="font-size: 13px;" class="btn btn-xs btn-inverse-success btn-rounded btn-fw"
+                    (click)="openPreview(mymodal1)">
+                    View Banner
+                  </button>
+                  <!-- Dialog Content -->
+                  <ng-template #mymodal1 let-modal>
+                    <div style="align-items: center;">
+                      <img [src]="banner.url" style="width: 100%; border: 0;" alt="banner">
+                    </div>
+                  </ng-template>
+                </td>
+
+                <!-- Edit -->
+                <td>
+                  <button style="font-size: 13px;" class="btn btn-xs btn-inverse-success btn-rounded btn-fw"
+                    (click)="open(mymodal, banner)">
+                    Edit Banner
+                  </button>
+                  <!-- Dialog Content -->
+                  <ng-template #mymodal let-modal>
+                    <div *ngIf="this.banner"
+                      style="width: 500px; height: 350px; text-align: center; margin-left: 20px;">
+                      <h3 style="margin-top: 20px;"> Edit Banner </h3>
+                      <form class="forms-sample" noValidate [formGroup]="editControl"
+                        (ngSubmit)="editBanner(banner.bannerId, banner.bannerName, banner.bannerDescription, banner.url)">
+                        <div class="form-group row" style="margin-top: 40px;">
+                          <label for="exampleInputEmail2" class="col-sm-3 col-form-label"> Name </label>
+                          <div class="col-sm-7">
+                            <input type="text" class="form-control" id="exampleInputEmail2"
+                              placeholder="Enter course code" [value]="this.banner.bannerName" name="name"
+                              formControlName="name" required>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label for="exampleInputPassword2" class="col-sm-3 col-form-label"> Link </label>
+                          <div class="col-sm-7">
+                            <input type="text" class="form-control" id="exampleInputPassword2"
+                              placeholder="Enter course name" [value]="this.banner.bannerDescription" name="description"
+                              formControlName="description" required>
+                          </div>
+                        </div>
+
+                        <div class="form-group row">
+                          <!-- <label  for="exampleInputEmail2" class="col-sm-3 col-form-label" for="file">File:</label> -->
+                          <div class="col-sm-9">
+                            <input type="file" (change)="handleFiles($event)" accept=".png,.jpg,.jpeg"
+                              style="font-size: 14px;" name="image" formControlName="image" />
+                          </div>
+                        </div>
+                        <div style="margin-top: 15px;" *ngIf="!this.showLabel && this.uploadLabel">
+                          <span style="color: blue;  letter-spacing: 2px; font-size: 14px;">
+                            Uploading ....
+                          </span>
+                        </div>
+
+                        <button style="margin-top: 20px;" type="submit" class="btn btn-success mr-4"> Edit Banner
+                        </button>
+                      </form>
+                    </div>
+                  </ng-template>
+                </td>
+
+
+                <td>
+                  <button style="font-size: 13px;" class="btn btn-xs btn-inverse-danger btn-rounded btn-fw"
+                    (click)="openDelete(mymodal2, banner)">
+                    Delete Banner
+                  </button>
+                  <ng-template #mymodal2 let-modal>
+                    <div style=" height: 130px; align-items: center; margin-top: 50px; margin-left: 80px;">
+                      <label> Are you sure you want to delete this image ?</label>
+                      <button style="font-size: 13px; margin-left: 30px;"
+                        class="btn btn-xs btn-inverse-success btn-rounded btn-fw"
+                        (click)="deleteImage(banner.bannerId)">
+                        Yes
+                      </button>
+                      &nbsp; &nbsp; &nbsp; &nbsp;
+                      <button style="font-size: 13px;" class="btn btn-xs btn-inverse-danger btn-rounded btn-fw"
+                        (click)="closeModal()">
+                        Cancel
+                      </button>
+                    </div>
+                  </ng-template>
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
